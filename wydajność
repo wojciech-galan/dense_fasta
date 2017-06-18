@@ -1,0 +1,28 @@
+# TL;DR najszybciej działa gmpy2, ale najlepiej się skaluje sharedmem. Powyżej 10kilo zasad już sharedmem szybsze
+uruchomione z poziomu Sequence2
+    for mnoznik in (5000, 10000, 20000, 40000):
+        print(mnoznik)
+        print(timeit.timeit('str(Sequence(seq, to_int_int, to_string_int))',
+                            setup="from Sequence import Sequence, to_int_int, to_string_int; seq = 'AGATA'*%d"%mnoznik, number=1))
+        print(timeit.timeit('str(Sequence(seq, to_int_gmpy2, to_string_gmpy2))',
+                            setup="from Sequence import Sequence, to_int_gmpy2, to_string_gmpy2; seq = 'AGATA'*%d"%mnoznik, number=1))
+        print(timeit.timeit('str(Sequence(seq, to_sharedmem, to_string))',
+                            setup="from Sequence import Sequence; from __main__ import to_sharedmem, to_string; seq = 'AGATA'*%d" % mnoznik,
+                            number=1))
+daje wyniki:
+5000
+1.0627706220002437
+0.15568002500003786
+0.3060872960013512
+10000
+4.254291002000173
+0.5712098209987744
+0.5474918960007926
+20000
+16.853417405000073
+1.9782784920007543
+1.0792920839994622
+40000
+67.13093974900039
+7.878131801999189
+2.1862395419993845
