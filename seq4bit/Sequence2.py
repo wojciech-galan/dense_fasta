@@ -12,7 +12,7 @@ assert sys.maxsize == 2**63 - 1
 
 def to_sharedmem(sequence, length, odd=False, processes=4): #ToDO change processes to sth more usefull
     arr = sharedmem.empty(math.ceil(len(sequence)/2), dtype='u1')
-    with sharedmem.MapReduce(np=2) as pool:
+    with sharedmem.MapReduce(np=processes) as pool:
         chunksize = int(length/processes//2*2)
         def work(i):
             print (i)
