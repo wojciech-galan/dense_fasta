@@ -7,7 +7,7 @@ import sys
 import math
 from Sequence import representation, rev_representation
 
-# assert it works in 64bit environment
+# assert environment is 64bit environment
 assert sys.maxsize == 2**63 - 1
 
 def to_sharedmem(sequence, length, odd=False, processes=4): #ToDO change processes to sth more usefull
