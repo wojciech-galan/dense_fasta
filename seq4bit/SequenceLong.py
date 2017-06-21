@@ -5,7 +5,8 @@ import numpy as np
 import sharedmem
 import sys
 import math
-from Sequence import representation, rev_representation
+from bit4rep import representation, rev_representation
+from Sequence import Sequence
 
 # assert environment is 64bit environment
 assert sys.maxsize == 2**63 - 1
@@ -51,34 +52,34 @@ def to_string(array, odd=False, processes=sharedmem.cpu_count()):
     return str(out_arr.tostring().decode())
 
 
-class Sequence(object):
+class SequenceLong(Sequence):
 
-    def __init__(self, seq=''):
+    def __init__(self, seq='', cpus=sharedmem.cpu_count()):
         super().__init__()
+        self.cpus = cpus
         self.load_string(seq)
-
-    @classmethod
-    def fromstring(cls, string):
-        return cls(string)
 
     def __len__(self):
         return self.length
 
     def __str__(self):
-        return to_string(self.seq, self.odd)
+        return to_string(self.seq, self.odd, self.cpus)
 
     def load_string(self, string):
         self.length = len(string)
         self.odd = self.length % 2
-        self.seq = to_sharedmem(string, self.length, self.odd)
+        self.seq = to_sharedmem(string, self.length, self.odd, self.cpus)
 
 
 if __name__ == '__main__':
     import timeit
     seq = 'AGATANNNA'
-    print(str(Sequence(seq)))
-    for mnoznik in (5000, 10000, 20000, 40000, 80000, 200000):
-        print(mnoznik)
-        print(timeit.timeit('str(Sequence(seq))',
-                            setup="from __main__ import Sequence; seq = 'AGATA'*%d" % mnoznik,
-                            number=10))
+    print(str(SequenceLong(seq)))
+    for mnoznik in (625, 1250, 2500, 5000, 10000, 20000, 40000):
+        print(mnoznik*5, timeit.timeit('str(SequenceLong(seq, 1))',
+                            setup="from __main__ import SequenceLong; seq = 'AGATA'*%d" % mnoznik,
+                            number=10), 1)
+    for mnoznik in (625, 1250, 2500, 5000, 10000, 20000, 40000):
+        print(mnoznik*5, timeit.timeit('str(SequenceLong(seq, 2))',
+                            setup="from __main__ import SequenceLong; seq = 'AGATA'*%d" % mnoznik,
+                            number=10), 2)
