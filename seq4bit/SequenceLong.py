@@ -75,6 +75,8 @@ if __name__ == '__main__':
     import timeit
     seq = 'AGATANNNA'
     print(str(SequenceLong(seq)))
+    seq *= 10000
+    assert str(SequenceLong(seq)) == seq
     for mnoznik in (625, 1250, 2500, 5000, 10000, 20000, 40000):
         print(mnoznik*5, timeit.timeit('str(SequenceLong(seq, 1))',
                             setup="from __main__ import SequenceLong; seq = 'AGATA'*%d" % mnoznik,

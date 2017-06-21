@@ -41,9 +41,11 @@ class SequenceShort(Sequence):
 
 if __name__ == '__main__':
     import timeit
+    seq = 'AGATA'
+    print(SequenceShort(seq))
+    seq *= 10000
+    assert str(SequenceShort(seq)) == seq
     for mnoznik in (625, 1250, 2500, 5000, 10000, 20000, 40000):
         print(mnoznik*5, timeit.timeit('str(SequenceShort(seq))',
                             setup="from __main__ import SequenceShort; seq = 'AGATA'*%d"%mnoznik, number=10))
-    seq = 'AGATA'
-    print(SequenceShort(seq))
 
