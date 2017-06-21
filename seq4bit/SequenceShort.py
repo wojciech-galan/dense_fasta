@@ -36,7 +36,6 @@ class SequenceShort(Sequence):
         return to_string(self.seq)
 
     def load_string(self, string):
-        self.length = len(string)
         self.seq = to_int(string)
 
 
