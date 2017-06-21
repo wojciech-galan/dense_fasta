@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-import numpy as np
+import psutil
 import sharedmem
 import sys
 import math
@@ -12,7 +12,7 @@ from Sequence import Sequence
 assert sys.maxsize == 2**63 - 1
 
 
-def to_sharedmem(sequence, length, odd=False, processes=sharedmem.cpu_count()):
+def to_sharedmem(sequence, length, odd=False, processes=psutil.cpu_count(logical=False)):
     arr = sharedmem.empty(math.ceil(len(sequence)/2), dtype='u1')
     with sharedmem.MapReduce(np=processes) as pool:
         chunksize = int(length/processes//2*2) or 1
